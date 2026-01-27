@@ -33,7 +33,7 @@ export function MainHero() {
   return (
     <section className="relative min-h-screen pt-20 md:pt-24 overflow-hidden bg-background">
       {/* Promo Banner */}
-      <div className="absolute top-16 md:top-20 left-0 right-0 bg-primary text-primary-foreground py-2 text-center z-10">
+      <div className="absolute top-16 md:top-20 left-0 right-0 neu-flat bg-primary text-primary-foreground py-2 text-center z-10">
         <p className="text-sm tracking-wider animate-fade-in">
           {PROMOS[promoIndex]}
         </p>
@@ -78,9 +78,9 @@ export function MainHero() {
                     key={design.id}
                     type="button"
                     onClick={() => setActiveDesign(index)}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${index === activeDesign
-                      ? "border-foreground scale-110 ring-2 ring-foreground/20 ring-offset-2 ring-offset-background"
-                      : "border-transparent hover:border-muted-foreground/50"
+                    className={`w-8 h-8 rounded-full border-2 transition-neu hover-lift ${index === activeDesign
+                      ? "border-foreground scale-110 neu-flat"
+                      : "border-transparent hover:border-muted-foreground/50 clay-button"
                       }`}
                     style={{ backgroundColor: design.color }}
                     aria-label={`View ${design.name} design`}
@@ -92,7 +92,7 @@ export function MainHero() {
 
           {/* 3D Preview */}
           <div className="order-1 lg:order-2 h-[50vh] lg:h-[70vh] relative">
-            <div className="absolute inset-0 flex items-center justify-center p-8">
+            <div className="absolute inset-0 flex items-center justify-center p-8 clay-card rounded-3xl hover-lift transition-neu">
               <img
                 src="/tshirt.png"
                 alt="T-shirt Preview"

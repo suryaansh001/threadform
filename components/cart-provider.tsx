@@ -19,6 +19,7 @@ interface CartContextType {
     removeFromCart: (itemId: string, color: string, size?: string) => void;
     updateQuantity: (itemId: string, color: string, size: string, newQuantity: number) => void;
     updateItemColor: (itemId: string, oldColor: string, size: string, newColor: string) => void;
+    updateItemSize: (itemId: string, color: string, oldSize: string, newSize: string) => void;
     clearCart: () => void;
     cartCount: number;
     total: number;
@@ -125,6 +126,40 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const updateItemSize = (itemId: string, color: string, oldSize: string, newSize: string) => {
+        setItems((prev) => {
+            const itemToUpdate = prev.find(
+                (item) => item.id === itemId && item.color === color && item.size === oldSize
+            );
+            if (!itemToUpdate) return prev;
+
+            const existingItemIndex = prev.findIndex(
+                (item) => item.id === itemId && item.color === color && item.size === newSize
+            );
+
+            let newItems = [...prev];
+
+            if (existingItemIndex > -1) {
+                // Merge quantities
+                newItems = newItems.filter(
+                    (item) => !(item.id === itemId && item.color === color && item.size === oldSize)
+                );
+                newItems[existingItemIndex] = {
+                    ...newItems[existingItemIndex],
+                    quantity: newItems[existingItemIndex].quantity + itemToUpdate.quantity,
+                };
+            } else {
+                // Just update size
+                newItems = newItems.map((item) =>
+                    item.id === itemId && item.color === color && item.size === oldSize
+                        ? { ...item, size: newSize }
+                        : item
+                );
+            }
+            return newItems;
+        });
+    };
+
     const removeFromCart = (itemId: string, color: string, size: string = "M") => {
         setItems((prev) =>
             prev.filter((item) => !(item.id === itemId && item.color === color && item.size === size))
@@ -140,7 +175,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <CartContext.Provider
-            value={{ items, addToCart, removeFromCart, updateQuantity, updateItemColor, clearCart, cartCount, total }}
+            value={{ items, addToCart, removeFromCart, updateQuantity, updateItemColor, updateItemSize, clearCart, cartCount, total }}
         >
             {children}
         </CartContext.Provider>

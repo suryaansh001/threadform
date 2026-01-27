@@ -27,7 +27,7 @@ export function Navigation() {
   const { cartCount } = useCart();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 clay-card backdrop-blur-2xl border-b border-white/20 dark:border-white/10">
       <nav className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -58,10 +58,12 @@ export function Navigation() {
               <span className="sr-only">Search</span>
             </Button>
 
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <User className="w-5 h-5" />
-              <span className="sr-only">Account</span>
-            </Button>
+            <Link href="/profile">
+              <Button variant="ghost" size="icon" className="hidden md:flex">
+                <User className="w-5 h-5" />
+                <span className="sr-only">Profile</span>
+              </Button>
+            </Link>
 
             <ThemeToggle />
 

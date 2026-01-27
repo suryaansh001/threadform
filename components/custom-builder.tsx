@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react"
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,14 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { Upload, Type, ImageIcon, Ruler, ShoppingBag } from "lucide-react";
-
-import { Scene } from "@/components/3d/Scene";
-import { TShirt } from "@/components/3d/TShirt";
-import { Decal, Text, useTexture } from "@react-three/drei";
-import { useLoader } from "@react-three/fiber";
-import * as THREE from "three";
 import { useCart } from "@/components/cart-provider";
 
 const COLORS = [
@@ -47,72 +38,28 @@ const FABRICS = [
 ];
 
 const FONTS = [
-  "Geist Bold",
-  "Inter Bold",
-  "Playfair Display",
-  "Bebas Neue",
-  "Montserrat",
+  "Arial",
+  "Georgia",
+  "Impact",
+  "Courier New",
+  "Comic Sans MS",
 ];
 
-function DecalImage({ url }: { url: string }) {
-  const texture = useLoader(THREE.TextureLoader, url);
-  return (
-    <Decal
-      position={[0, 0.05, 0.15]}
-      rotation={[0, 0, 0]}
-      scale={0.3}
-      map={texture}
-    />
-  );
-}
-
-function CustomShirtPreview({
-  color,
-  text,
-  font,
-  image
-}: {
-  color: string;
-  text: string;
-  font: string;
-  image: string | null;
-}) {
-  return (
-    <TShirt color={color} scale={0.02}>
-      {image && (
-        <DecalImage url={image} />
-      )}
-      {text && (
-        <Text
-          position={[0, -0.1, 0.15]}
-          fontSize={0.15}
-          color={color === "#ffffff" || color === "#d4c4b0" || color === "#c2b280" ? "#1a1a1a" : "#ffffff"}
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={0.5}
-          textAlign="center"
-        >
-          {text}
-        </Text>
-      )}
-    </TShirt>
-  );
-}
-
 export function CustomBuilder() {
-  const [color, setColor] = useState(COLORS[0].value);
+  const [color, setColor] = useState("#ffffff");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [customText, setCustomText] = useState("");
+  const [selectedFont, setSelectedFont] = useState(FONTS[0]);
+  const [fontSize, setFontSize] = useState([24]);
   const [size, setSize] = useState("M");
   const [fabric, setFabric] = useState(FABRICS[0].name);
-  const [customText, setCustomText] = useState("");
-  const [fontSize, setFontSize] = useState([24]);
-  const [selectedFont, setSelectedFont] = useState(FONTS[0]);
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { addToCart } = useCart();
 
+  // Calculate pricing
+  const basePrice = 29.99;
   const fabricPrice = FABRICS.find((f) => f.name === fabric)?.price || 0;
-  const basePrice = 34.99;
-  const customizationPrice = customText || uploadedImage ? 5.99 : 0;
+  const customizationPrice = (uploadedImage ? 10 : 0) + (customText ? 5 : 0);
   const totalPrice = basePrice + fabricPrice + customizationPrice;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,33 +73,67 @@ export function CustomBuilder() {
     }
   };
 
+  // Get text color based on shirt color for contrast
+  const getTextColor = () => {
+    const darkColors = ["#1a1a1a", "#2d3436", "#1e3a5f", "#2d4a3e", "#8b2635"];
+    return darkColors.includes(color) ? "#ffffff" : "#1a1a1a";
+  };
+
   return (
-    <section id="custom" className="py-20 md:py-32 bg-background">
+    <section id="customize" className="py-20 md:py-32 bg-muted/50">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
-            Custom T-Shirt Builder
+            Design Your Own
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Design your own masterpiece. Upload your art or add custom text.
+            Create a unique t-shirt with your own design, text, and style preferences
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* 3D Preview */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
+          {/* Preview Panel */}
           <div className="order-1 lg:order-2">
             <div className="sticky top-24">
-              <div className="aspect-square bg-muted dark:bg-muted/50 rounded-lg overflow-hidden border border-border flex items-center justify-center relative">
-                <Scene className="w-full h-full" cameraPosition={[0, 0, 3.5]}>
-                  <CustomShirtPreview
-                    color={color}
-                    text={customText}
-                    font={selectedFont}
-                    image={uploadedImage}
-                  />
-                </Scene>
-                {/* Reset View Button or Controls could go here */}
+              <div className="clay-card rounded-2xl p-8 hover-lift transition-neu">
+                {/* Simple 2D T-Shirt Preview */}
+                <div className="relative w-full aspect-square flex items-center justify-center neu-pressed rounded-2xl"
+                     style={{ backgroundColor: color }}>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src="/tshirt.png"
+                      alt="T-Shirt Preview"
+                      className="w-full h-full object-contain mix-blend-multiply opacity-20"
+                    />
+                  </div>
+                  
+                  {/* Uploaded Image */}
+                  {uploadedImage && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <img
+                        src={uploadedImage}
+                        alt="Custom design"
+                        className="w-1/2 h-1/2 object-contain"
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Custom Text */}
+                  {customText && (
+                    <div
+                      className="absolute bottom-1/4 left-1/2 transform -translate-x-1/2 text-center max-w-xs"
+                      style={{
+                        color: getTextColor(),
+                        fontFamily: selectedFont,
+                        fontSize: `${fontSize[0]}px`,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {customText}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -208,7 +189,7 @@ export function CustomBuilder() {
                       <div className="flex items-center gap-4">
                         <div className="w-16 h-16 bg-muted rounded overflow-hidden">
                           <img
-                            src={uploadedImage || "/placeholder.svg"}
+                            src={uploadedImage}
                             alt="Uploaded design"
                             className="w-full h-full object-cover"
                           />
@@ -237,10 +218,11 @@ export function CustomBuilder() {
                           key={c.value}
                           type="button"
                           onClick={() => setColor(c.value)}
-                          className={`w-10 h-10 rounded-full border-2 transition-all ${color === c.value
-                            ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                            : "border-border hover:border-muted-foreground"
-                            }`}
+                          className={`w-10 h-10 rounded-full border-2 transition-all ${
+                            color === c.value
+                              ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                              : "border-border hover:border-muted-foreground"
+                          }`}
                           style={{ backgroundColor: c.value }}
                           aria-label={`Select ${c.name}`}
                           title={c.name}
@@ -289,7 +271,7 @@ export function CustomBuilder() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Font Size: {fontSize}px</Label>
+                      <Label>Font Size: {fontSize[0]}px</Label>
                       <Slider
                         value={fontSize}
                         onValueChange={setFontSize}
@@ -373,19 +355,23 @@ export function CustomBuilder() {
                   </div>
                 </div>
 
-                <Button size="lg" className="w-full" onClick={() => {
-                  // Create a custom product object
-                  const customProduct = {
-                    id: `custom-${Date.now()}`, // simple unique id gen
-                    name: "Custom T-Shirt Design",
-                    price: totalPrice,
-                    image: "/tshirt.png", // Or the uploaded image if we want to get fancy with blob storage, but sticking to fallback for now since persistence is local only.
-                    isCustom: true
-                  };
-                  addToCart(customProduct, color, size);
-                }}>
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={() => {
+                    const customProduct = {
+                      id: `custom-${Date.now()}`,
+                      name: "Custom T-Shirt Design",
+                      price: totalPrice,
+                      colors: [color],
+                      category: "Custom",
+                      image: "/tshirt.png",
+                    };
+                    addToCart(customProduct, color);
+                  }}
+                >
                   <ShoppingBag className="w-4 h-4 mr-2" />
-                  Add to Cart
+                  Add to Cart - ${totalPrice.toFixed(2)}
                 </Button>
               </CardContent>
             </Card>

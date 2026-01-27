@@ -9,6 +9,8 @@ export interface Product {
     isSale?: boolean;
     image: string;
     hoverImage?: string;
+    description?: string;
+    images?: string[]; // Multiple product images
 }
 
 export const PRODUCTS: Product[] = [

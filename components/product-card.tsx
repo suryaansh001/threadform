@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingBag, Eye } from "lucide-react";
@@ -24,6 +25,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onQuickAdd }: ProductCardProps) {
+  const router = useRouter();
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -39,7 +41,10 @@ export function ProductCard({ product, onQuickAdd }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container */}
-      <div className="relative aspect-[3/4] bg-muted overflow-hidden mb-4">
+      <div
+        className="relative aspect-[3/4] neu-pressed rounded-2xl overflow-hidden mb-4 cursor-pointer transition-neu hover:neu-flat"
+        onClick={() => router.push(`/product/${product.id}`)}
+      >
         {/* Placeholder for product image */}
         <div
           className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105 bg-white"
@@ -67,9 +72,9 @@ export function ProductCard({ product, onQuickAdd }: ProductCardProps) {
         <button
           type="button"
           onClick={() => setIsWishlisted(!isWishlisted)}
-          className={`absolute top-3 right-3 p-2 rounded-full transition-all ${isWishlisted
-              ? "bg-accent text-accent-foreground"
-              : "bg-background/80 hover:bg-background text-foreground"
+          className={`absolute top-3 right-3 p-2 rounded-full transition-neu clay-button hover-lift ${isWishlisted
+              ? "neu-pressed"
+              : "hover:neu-flat"
             }`}
           aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
@@ -78,7 +83,7 @@ export function ProductCard({ product, onQuickAdd }: ProductCardProps) {
 
         {/* Quick Actions */}
         <div
-          className={`absolute bottom-0 left-0 right-0 p-3 bg-background/90 backdrop-blur-sm transform transition-transform duration-300 ${isHovered ? "translate-y-0" : "translate-y-full"
+          className={`absolute bottom-0 left-0 right-0 p-3 clay-card backdrop-blur-2xl transform transition-neu ${isHovered ? "translate-y-0" : "translate-y-full"
             }`}
         >
           <div className="flex gap-2">
@@ -90,7 +95,15 @@ export function ProductCard({ product, onQuickAdd }: ProductCardProps) {
               <ShoppingBag className="w-4 h-4 mr-2" />
               Quick Add
             </Button>
-            <Button size="sm" variant="outline" className="bg-transparent">
+            <Button
+              size="sm"
+              variant="outline"
+              className="bg-transparent"
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/product/${product.id}`);
+              }}
+            >
               <Eye className="w-4 h-4" />
               <span className="sr-only">Quick View</span>
             </Button>
