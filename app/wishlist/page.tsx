@@ -12,6 +12,7 @@ const MOCK_WISHLIST = [
     price: 29.99,
     image: "/tshirt.png",
     category: "Minimal",
+    colors: ["#1a1a1a", "#ffffff", "#d4c4b0"],
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ const MOCK_WISHLIST = [
     price: 34.99,
     image: "/tshirt.png",
     category: "Streetwear",
+    colors: ["#1a1a1a", "#8b2635", "#ffffff"],
   },
   {
     id: "3",
@@ -26,6 +28,7 @@ const MOCK_WISHLIST = [
     price: 32.99,
     image: "/tshirt.png",
     category: "Anime",
+    colors: ["#ffffff", "#1a1a1a", "#2d3436"],
   },
 ];
 
@@ -45,7 +48,7 @@ export default function WishlistPage() {
             {MOCK_WISHLIST.length > 0 ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {MOCK_WISHLIST.map((product) => (
-                  <ProductCard key={product.id} {...product} />
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (

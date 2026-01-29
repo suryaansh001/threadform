@@ -14,23 +14,54 @@ interface ProductGridProps {
   title?: string;
   subtitle?: string;
   initialCategory?: string;
+  section?: string;
+  sortBy?: string;
 }
 
 export function ProductGrid({
   title = "Shop Our Collection",
   subtitle = "Original designs, premium quality, delivered to your door",
   initialCategory = "All",
+  section,
+  sortBy = "featured",
 }: ProductGridProps) {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [visibleCount, setVisibleCount] = useState(8);
   const { addToCart } = useCart();
 
-  const filteredProducts = PRODUCTS.filter((product) => {
+  let filteredProducts = PRODUCTS.filter((product) => {
+    if (section) {
+      // Handle specific sections
+      if (section === "best-sellers") return product.isSale || product.isNew;
+    }
     if (activeCategory === "All") return true;
     if (activeCategory === "New Arrivals") return product.isNew;
     if (activeCategory === "Sale") return product.isSale;
     return product.category === activeCategory;
   });
+
+  // Apply sorting
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      case "name-asc":
+        return a.name.localeCompare(b.name);
+      case "name-desc":
+        return b.name.localeCompare(a.name);
+      case "newest":
+        return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+      case "best-selling":
+        return (b.isSale ? 1 : 0) - (a.isSale ? 1 : 0);
+      case "featured":
+      default:
+        return 0;
+    }
+  });
+
+  filteredProducts = sortedProducts;
 
   const handleQuickAdd = (product: Product, color: string) => {
     addToCart(product, color);
