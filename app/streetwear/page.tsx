@@ -8,13 +8,7 @@ import { ProductSort } from "@/components/product-sort";
 import { Footer } from "@/components/footer";
 
 export default function StreetwearPage() {
-  const [selectedFilters, setSelectedFilters] = useState({
-    colors: [],
-    sizes: [],
-    styles: [],
-    fit: [],
-    priceRange: [0, 100],
-  });
+  const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("featured");
 
   return (
@@ -38,7 +32,7 @@ export default function StreetwearPage() {
         <section className="container mx-auto px-6 py-12">
           <div className="flex gap-8">
             <aside className="hidden lg:block w-72 flex-shrink-0">
-              <ProductFilters selectedFilters={selectedFilters} onFiltersChange={setSelectedFilters} />
+              <ProductFilters onFilterChange={setFilters} />
             </aside>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-6 gap-4">
@@ -46,9 +40,9 @@ export default function StreetwearPage() {
                   <h2 className="text-2xl font-bold text-foreground">Streetwear Collection</h2>
                   <p className="text-muted-foreground mt-1">48 products</p>
                 </div>
-                <ProductSort value={sortBy} onChange={setSortBy} />
+                <ProductSort onSortChange={setSortBy} currentSort={sortBy} />
               </div>
-              <ProductGrid initialCategory="streetwear" filters={selectedFilters} sortBy={sortBy} />
+              <ProductGrid initialCategory="streetwear" sortBy={sortBy} />
             </div>
           </div>
         </section>

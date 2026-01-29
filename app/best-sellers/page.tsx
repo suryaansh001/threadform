@@ -9,13 +9,7 @@ import { Footer } from "@/components/footer";
 import { TrendingUp } from "lucide-react";
 
 export default function BestSellersPage() {
-  const [selectedFilters, setSelectedFilters] = useState({
-    colors: [],
-    sizes: [],
-    styles: [],
-    fit: [],
-    priceRange: [0, 100],
-  });
+  const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("best-selling");
 
   return (
@@ -42,7 +36,7 @@ export default function BestSellersPage() {
         <section className="container mx-auto px-6 py-12">
           <div className="flex gap-8">
             <aside className="hidden lg:block w-72 flex-shrink-0">
-              <ProductFilters selectedFilters={selectedFilters} onFiltersChange={setSelectedFilters} />
+              <ProductFilters onFilterChange={setFilters} />
             </aside>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-6 gap-4">
@@ -50,9 +44,9 @@ export default function BestSellersPage() {
                   <h2 className="text-2xl font-bold text-foreground">Top Products</h2>
                   <p className="text-muted-foreground mt-1">Customer favorites across all categories</p>
                 </div>
-                <ProductSort value={sortBy} onChange={setSortBy} />
+                <ProductSort onSortChange={setSortBy} currentSort={sortBy} />
               </div>
-              <ProductGrid section="best-sellers" filters={selectedFilters} sortBy={sortBy} />
+              <ProductGrid section="best-sellers" sortBy={sortBy} />
             </div>
           </div>
         </section>

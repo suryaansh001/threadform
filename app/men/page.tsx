@@ -46,13 +46,7 @@ const CATEGORY_SECTIONS = [
 
 export default function MenPage() {
     const [activeSection, setActiveSection] = useState("all");
-    const [selectedFilters, setSelectedFilters] = useState({
-        colors: [],
-        sizes: [],
-        styles: [],
-        fit: [],
-        priceRange: [0, 100]
-    });
+    const [filters, setFilters] = useState({});
     const [sortBy, setSortBy] = useState("featured");
 
     return (
@@ -135,10 +129,7 @@ export default function MenPage() {
                     <div className="flex gap-8">
                         {/* Filters Sidebar - Desktop */}
                         <aside className="hidden lg:block w-72 flex-shrink-0">
-                            <ProductFilters
-                                selectedFilters={selectedFilters}
-                                onFiltersChange={setSelectedFilters}
-                            />
+                            <ProductFilters onFilterChange={setFilters} />
                         </aside>
 
                         {/* Main Content */}
@@ -156,17 +147,13 @@ export default function MenPage() {
                                         Discover our latest collection
                                     </p>
                                 </div>
-                                <ProductSort
-                                    value={sortBy}
-                                    onChange={setSortBy}
-                                />
+                                <ProductSort onSortChange={setSortBy} currentSort={sortBy} />
                             </div>
 
                             {/* Product Grid */}
                             <ProductGrid
                                 initialCategory="Men"
                                 section={activeSection}
-                                filters={selectedFilters}
                                 sortBy={sortBy}
                             />
                         </div>
