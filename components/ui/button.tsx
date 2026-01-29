@@ -5,20 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-neu disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] hover-press relative overflow-hidden",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-neu disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] hover-press relative overflow-hidden button-glow button-ripple",
   {
     variants: {
       variant: {
-        default: "neu-flat hover:neu-raised bg-primary text-primary-foreground hover:scale-[1.02] active:neu-pressed active:scale-[0.98]",
+        default: "neu-flat hover:neu-raised bg-primary text-primary-foreground hover:scale-[1.05] hover:shadow-2xl active:neu-pressed active:scale-[0.97] hover:brightness-110",
         destructive:
-          "neu-flat hover:neu-raised bg-destructive text-white hover:scale-[1.02] active:neu-pressed active:scale-[0.98] focus-visible:ring-destructive/20",
+          "neu-flat hover:neu-raised bg-destructive text-white hover:scale-[1.05] hover:shadow-2xl active:neu-pressed active:scale-[0.97] focus-visible:ring-destructive/20 hover:brightness-110",
         outline:
-          "clay-button hover:scale-[1.02] active:scale-[0.98] backdrop-blur-xl bg-background/80 text-foreground hover:bg-background/90",
+          "clay-button hover:scale-[1.05] hover:shadow-xl active:scale-[0.97] backdrop-blur-xl bg-background/80 text-foreground hover:bg-background/95 hover:border-foreground/30",
         secondary:
-          "neu-flat hover:neu-raised bg-secondary text-secondary-foreground hover:scale-[1.02] active:neu-pressed active:scale-[0.98]",
+          "neu-flat hover:neu-raised bg-secondary text-secondary-foreground hover:scale-[1.05] hover:shadow-2xl active:neu-pressed active:scale-[0.97] hover:brightness-105",
         ghost:
-          "hover:clay-button hover:scale-[1.02] active:scale-[0.98] hover:backdrop-blur-xl",
-        link: "text-primary underline-offset-4 hover:underline",
+          "hover:clay-button hover:scale-[1.05] hover:shadow-lg active:scale-[0.97] hover:backdrop-blur-xl hover:bg-secondary/50",
+        link: "text-primary underline-offset-4 hover:underline hover:brightness-110",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

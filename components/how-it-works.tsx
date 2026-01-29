@@ -56,12 +56,12 @@ export function HowItWorks() {
               return (
                 <div key={step.title} className="relative text-center">
                   {/* Icon Circle */}
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-background border-2 border-border mb-6 relative z-10">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full clay-card mb-6 relative z-20">
                     <Icon className="w-7 h-7 text-foreground" />
                   </div>
 
                   {/* Step Number */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-6 h-6 rounded-full bg-foreground text-background text-xs font-bold flex items-center justify-center">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-7 h-7 rounded-full bg-foreground text-background text-xs font-bold flex items-center justify-center z-30 shadow-lg">
                     {index + 1}
                   </div>
 
